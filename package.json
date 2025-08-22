@@ -1,0 +1,24 @@
+{
+  "name": "projeto-fuction-js",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "gh-pages -d dist",
+    "build": "build vite",
+    "start": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "José ismael correia",
+  "license": "ISC",
+  "description": "Projeto de exercicios de Js",
+  "devDependencies": {
+    "sass": "^1.90.0",
+    "vite": "^7.1.3",
+    "gh-pages": "~6.3.0"	
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.7"
+  }
+}
