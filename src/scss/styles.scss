@@ -1,0 +1,37 @@
+// Import all of Bootstrap’s CSS
+@import "bootstrap/scss/bootstrap";
+
+/* Remove o botão nativo de mostrar senha no Chrome/Edge */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+/* Versões modernas do Chrome/Edge usam esse pseudo-elemento */
+input[type="password"]::-webkit-password-toggle-button {
+  display: none !important;
+}
+
+/* === Remover botão de mostrar senha nativo do Chrome/Edge === */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}
+
+input[type="password"]::-webkit-password-toggle-button {
+  display: none !important;
+}
+
+/* === Remover setas do input number (Chrome, Edge, Safari) === */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* === Remover setas no Firefox === */
+input[type=number] {
+  -moz-appearance: textfield;
+}

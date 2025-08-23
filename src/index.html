@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Function JavaScript</title>
+    <script type="module" src="./js/main.js"></script>
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <header class="text-center container-fluid bg-secondary bg-gradient">
+        <h1 class="text-light">Function Js</h1>
+    </header>
+    <main class="container border bg-secondary border-light rounded border-3">
+        <section class="container text-center mt-4 py-5 border-2">
+            <h2 class="mt-3 text-light">Calculadora IMC</h2>
+            <p class="mt-4 text-light">Server para descobri o IMC do corpo</p>
+            <div class="row justify-content-center g-4 mt-3">
+                <div class="col-12 col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text">Peso</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text">Altura</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-5">
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Calcular</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
+            </div>
+        </section>
+        <section class="container text-center mt-5 py-5 border-2 border-top">
+            <h2 class="text-light">Juros Simples e Compostos</h2>
+            <p class="text-light">Serve para fazer calculos de juros</p>
+            <div class="row justify-content-center g-4 mt-3">
+                <h3 class="text-light">Juros Simples</h3>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">J</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">C</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">I</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">T</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center g-4 mt-3">
+                <h3 class="mt-5 text-light">Juros Composto</h3>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">M</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">C</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">I</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">N</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 justify-content-center mt-5">
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Resultado</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
+            </div>
+        </section>
+        <section class="container text-center mt-5 py-5 border-2 border-top">
+            <h2 class="mt-3 text-light">verificar Numero Primo</h2>
+            <p class="mt-4 text-light">Calculo para descobrir se o numero é primo</p>
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-md-3 w-50 p-4">
+                    <h3 class="display-3 text-bg-light rounded">Resultado</h3>
+                </div>
+            </div>
+            <div class="row justify-content-center g-4">
+                <div class="col-12 col-md-3">
+                    <input type="number" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex flex-wrap mt-4 gap-3 justify-content-center">
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Analisar</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
+            </div>
+        </section>
+        <section class="container text-center mt-5 py-5 border-2 border-top">
+            <h2 class="mt-4 text-light">Conversor de base Númerica</h2>
+            <p class="mt-4 text-light">Serve para converter de Decimal para Binário ou Hexadecimal</p>
+            <div class="row justify-content-center g-3 mt-4">
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Decimal</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Binário</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-2">
+                    <div class="input-group">
+                        <span class="input-group-text">Hexadecimal</span>
+                        <input type="number" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-3 mt-5 mb-2 justify-content-center">
+                <button class="btn btn-outline-light btn-lg text-uppercase">converter</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase limpar">Limpar</button>
+            </div>
+        </section>
+        <section class="container text-center mt-5 py-5 border-2 border-top">
+            <h2 class="mt-2 text-light">Gerador de Senha Aleatória</h2>
+            <p class="mt-3 text-light">Gera senhas aleatórias de segurança</p>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mt-5">
+                    <div class="input-group">
+                        <span class="input-group-text">Senha</span>
+                        <input type="password" class="form-control" placeholder="Tenha uma senha Aleatório" id="senha">
+                        <span class="position-absolute top-50 end-0 translate-middle-y me-3 password-toggle" id="toggleSenha">👁️</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-5 mb-3 justify-content-center">
+                <button class="btn btn-outline-light btn-lg text-uppercase">Gerar</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase limpar">Limpar</button>
+            </div>
+        </section>
+    </main>
+    <footer class="mt-auto container-fluid text-center bg-secondary bg-gradient">
+        <h3 class="row justify-content-center text-light p-2">José Ismael Correia @Dev Front-end</h3>
+    </footer>
+  </body>
+</html>
