@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 
 export default {
-  base: '/Fuction-Js/',
+  base: '/Function-Js/',
   root: resolve(__dirname, 'src'),
   build: {
     outDir: '../dist'
