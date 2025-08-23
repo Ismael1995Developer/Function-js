@@ -1,1 +1,1 @@
-# Fuction-js
+# Function-js
