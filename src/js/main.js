@@ -9,7 +9,10 @@ import Alert from 'bootstrap/js/dist/alert';
 // or, specify which plugins you need:
 import { Tooltip, Toast, Popover } from 'bootstrap';
 
-// função mostar e ocultar password
+//biblioteca cleave.js para inputs e outros. 
+import cleave from 'cleave.js';
+
+// função mostra e ocultar password
 toggleSenha.style.cursor = "pointer";
 
 document.querySelector("#toggleSenha").addEventListener('click', () => {
@@ -39,6 +42,224 @@ document.querySelectorAll(".limpar").forEach(botao => {
         input.value = ""; // limpa
         input.dispatchEvent(new Event("input", { bubbles: true }));
       });
+      
+      // Limpar os campos Inner.HTML 
+      //display calculo IMC
+      const imcResult = document.querySelector("#imcResult");
+      imcResult.innerHTML = "IMC:";
+      //display calculo juros
+      const displayJurSimp = document.querySelector("#displayJurSimp");
+      const displayJurComp = document.querySelector("#displayJurComp");
+      displayJurSimp.textContent = "Juros Simples";
+      displayJurComp.textContent = "Juros Composto";
+      //display verifica numero primo
+      const displayPri = document.querySelector("#displayPri");
+      displayPri.textContent = "Número Primo";
     });
   });
   
+  //instancia Classes biblioteca Cleave.js 
+  new cleave('#inputPeso', {
+    numeral: true,
+    numeralDecimalMark: ',',
+    numeralDecimalScale: 1,
+    numeralIntegerScale: 2
+  });
+
+  const cleaveAlt = new Cleave('#inputAlt', {
+    numeral: true,
+    numeralDecimalMark: ',',
+    numeralDecimalScale: 2,    // quantidade de casas decimais
+    numeralIntegerScale: 1,    // dígitos antes da vírgula
+    numeralPositiveOnly: true, // apenas números positivos
+    delimiter: ''               // sem separador de milhares
+  });
+
+  //função calculo IMC 
+
+  document.querySelector("#btnCal").addEventListener('click', () => {
+
+    const inputPeso = document.querySelector("#inputPeso");
+    const imcResult = document.querySelector("#imcResult");
+   
+    // validação e limitação do number campos 
+    if (inputPeso.value === "" || cleaveAlt.getRawValue() === "") {
+      imcResult.innerHTML = "Preencher os Campos Vazios";
+      return;
+    }
+
+    let peso = Number(inputPeso.value);
+    let altura = Number(cleaveAlt.getRawValue());
+   
+       // calculo de IMC 
+      let IMC = peso / (altura * altura);
+      console.log(`${IMC}`);
+
+      // Função de verifição do IMC interpretação 
+      let classificacao = "";
+      let grauObesidade = 0;
+
+      if (IMC <= 18.5) {
+        classificacao = "Magraza";
+      }else if (IMC >= 18.5 && IMC <= 24.9) {
+        classificacao = "Normal";
+      }else if (IMC >= 25.0 && IMC <= 29.9) {
+        classificacao = "SobrePeso";
+        grauObesidade = 1;
+      }else if (IMC >= 30.0 && IMC <= 39.9) {
+        classificacao = "Obesidade";
+        grauObesidade = 2;
+      }else {
+        classificacao = "Obesidade Grave";
+        grauObesidade = 3;
+      };
+
+      imcResult.innerHTML = `IMC: ${IMC.toFixed(2)} Classificação: ${classificacao} Grau: ${grauObesidade}`;
+
+  });
+  
+ // 1) Perfis de formatação
+const optReal = {
+  numeral: true,
+  numeralDecimalMark: ',',              // vírgula como decimal para o usuário
+  numeralThousandsGroupStyle: 'thousand',
+  numeralDecimalScale: 2,               // 2 casas decimais
+  numeralPositiveOnly: true,
+  prefix: 'R$ ',                        // mostra "R$ " no input
+  noImmediatePrefix: true,             
+  delimiter: '.',                       // separador de milhar (BR)
+  rawValueTrimPrefix: true             // <<< remove "R$ " do getRawValue()
+};
+
+const optTempo = {
+  numeral: true,
+  numeralDecimalScale: 0,               // inteiro
+  numeralIntegerScale: 4,               // até 4 dígitos
+  numeralPositiveOnly: true,
+  delimiter: ''                         // sem separador
+};
+
+const optTaxa = {
+  numeral: true,
+  numeralDecimalMark: ',',              // usuário digita vírgula
+  numeralDecimalScale: 4,               // até 4 casas (ex.: 2,3456)
+  numeralIntegerScale: 3,               // até 3 dígitos inteiros (ex.: 100)
+  numeralPositiveOnly: true,
+  delimiter: ''                         // sem separador
+};
+
+// 2) Aplicar por classe (em lote)
+const clReais = Array.from(document.querySelectorAll('#secaoJuros .inputReal'))
+  .map(el => new Cleave(el, optReal));
+
+const clTempo = Array.from(document.querySelectorAll('#secaoJuros .inputTempo'))
+  .map(el => new Cleave(el, optTempo));
+
+const clTaxa  = Array.from(document.querySelectorAll('#secaoJuros .inputTaxa'))
+  .map(el => new Cleave(el, optTaxa));
+
+// função Global validação da instancia do Cleave 
+function readNum(inst) {
+  if (!inst) return null;
+  const raw = inst.getRawValue(); // "" ou "1234.56"
+  return raw === '' ? null : Number(raw);
+}
+
+// Função Global normaliza taxa: se usuário digita 2,5 (percentual), vira 0.025
+function normTaxa(t) {
+  if (!Number.isFinite(t)) return null;
+  return t >= 1 ? t / 100 : t;
+}
+
+document.querySelector("#btnResult").addEventListener("click", () => {
+  // --- SIMPLES (usa os índices 0) ---
+  const capitalSimples = readNum(clReais[0]);
+  const tempoSimples   = readNum(clTempo[0]);
+  const taxaSimplesUI  = readNum(clTaxa[0]);
+  const iS             = normTaxa(taxaSimplesUI);
+
+  // só calcula Simples se ao menos um campo foi preenchido
+  const algumS = [capitalSimples, tempoSimples, iS].some(v => v !== null);
+  if (algumS) {
+    const validS = [capitalSimples, tempoSimples, iS].every(v => Number.isFinite(v) && v > 0);
+    if (validS) {
+      const jurosS = capitalSimples * iS * tempoSimples;
+      displayJurSimp.textContent = `Juros: ${jurosS.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    } else {
+      displayJurSimp.textContent = "Preencha os campos válidos (Simples).";
+    }
+  }
+  
+  // --- COMPOSTO (usa os índices 1) ---
+  const capitalComp = readNum(clReais[1]);
+  const tempoComp   = readNum(clTempo[1]);
+  const taxaCompUI  = readNum(clTaxa[1]);
+  const iC          = normTaxa(taxaCompUI);
+
+  const algumC = [capitalComp, tempoComp, iC].some(v => v !== null);
+  if (algumC) {
+    const validC = [capitalComp, tempoComp, iC].every(v => Number.isFinite(v) && v > 0);
+    if (validC) {
+      const montante = capitalComp * (1 + iC) ** tempoComp;
+      const jurosC   = montante - capitalComp;
+      displayJurComp.textContent = `Juros: ${jurosC.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} / Montante: ${montante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    } else {
+      displayJurComp.textContent = "Preencha os campos válidos (Composto).";
+    }
+  }
+});
+
+
+// validação input para numero inteiro
+const inputPri = new Cleave ('#inputPri', {
+  numeral: true,                  // confirma que é numero
+  numeralDecimalMark: ',',        // altera o , para .
+  numeralDecimalScale: 0,         // sem casas decimais (inteiro)
+  numeralIntegerScale: 10,        // limite de dígitos antes da virgula
+  numeralPositiveOnly: true,      // Só numeros positivos
+  delimiter: ''
+});
+
+
+// função veirifica se o numero é primo 
+
+document.querySelector("#btnAnalis").addEventListener('click', () => {
+
+  // Validação campo vazio 
+if (inputPri.getRawValue() === "") {
+  displayPri.textContent = "Preencher o campo vazio";
+  return;
+}; 
+  const valor = Number(inputPri.getRawValue());
+  let primo = 0;
+  for(let i = 1; i <= valor; i++ ) {
+      if(valor % i === 0) {
+        primo++;
+        if (primo === 2) {
+          displayPri.textContent = `O Número (${valor}) é Primo.`;
+        }
+      }else {
+        displayPri.textContent = `O Número (${valor}) Não é Primo.`;
+      };
+  };
+  return;
+
+});
+
+// // função enxuta de verificar numero primos 
+// function ehPrimo(n) {
+//   if (!Number.isInteger(n) || n <= 1) return false;
+//   if (n <= 3) return true;
+//   if (n % 2 === 0 || n % 3 === 0) return false;
+
+//   for (let i = 5; i * i <= n; i += 6) {
+//     if (n % i === 0 || n % (i + 2) === 0) return false;
+//   }
+//   return true;
+// }
+
+
+
+
+
+

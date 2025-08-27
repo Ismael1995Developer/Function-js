@@ -1,5 +1,5 @@
 {
-  "name": "projeto-function-js",
+  "name": "projeto-function",
   "version": "1.0.3",
   "private": true,
   "scripts": {
@@ -22,6 +22,16 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "bootstrap": "^5.3.7"
-  }
+    "bootstrap": "^5.3.7",
+    "cleave.js": "^1.6.0"
+  },
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ismael1995Developer/Fuction-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ismael1995Developer/Fuction-js/issues"
+  },
+  "homepage": "https://github.com/Ismael1995Developer/Fuction-js#readme"
 }
