@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Function JavaScript</title>
-    <script type="module" crossorigin src="/Function-js/assets/index-BWWGX7oe.js"></script>
+    <script type="module" crossorigin src="/Function-js/assets/index-D0uKHeC9.js"></script>
     <link rel="stylesheet" crossorigin href="/Function-js/assets/index-BeI8qDt0.css">
   </head>
   <body class="d-flex flex-column min-vh-100">
@@ -15,102 +15,95 @@
         <section class="container text-center mt-4 py-5 border-2">
             <h2 class="mt-3 text-light">Calculadora IMC</h2>
             <p class="mt-4 text-light">Server para descobri o IMC do corpo</p>
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6">
+                    <h3 class="mt-4 text-bg-light" id="imcResult">IMC: 0.0</h3>
+                </div>
+            </div>
             <div class="row justify-content-center g-4 mt-3">
                 <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">Peso</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control" id="inputPeso" placeholder="Digite seu Peso">
                     </div>
                 </div>
                 <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">Altura</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control" id="inputAlt" placeholder="Digite Sua Altura">
                     </div>
                 </div>
             </div>
             <div class="d-flex flex-wrap gap-2 justify-content-center mt-5">
-                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Calcular</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button" id="btnCal">Calcular</button>
                 <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
             </div>
         </section>
-        <section class="container text-center mt-5 py-5 border-2 border-top">
+        <section class="container text-center mt-5 py-5 border-2 border-top" id="secaoJuros">
             <h2 class="text-light">Juros Simples e Compostos</h2>
             <p class="text-light">Serve para fazer calculos de juros</p>
             <div class="row justify-content-center g-4 mt-3">
-                <h3 class="text-light">Juros Simples</h3>
-                <div class="col-12 col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-text">J</span>
-                        <input type="number" class="form-control">
-                    </div>
-                </div>
-                <div class="col-12 col-md-2">
+                <h3 class="text-light" id="displayJurSimp">Juros Simples</h3>
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">C</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputReal" id="capitalSimples" placeholder="Digite o Capital (R$)">
                     </div>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">I</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputTaxa" placeholder="Digite a Taxa de Juros">
                     </div>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">T</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputTempo" placeholder="Digite o Tempo (meses)">
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center g-4 mt-3">
-                <h3 class="mt-5 text-light">Juros Composto</h3>
-                <div class="col-12 col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-text">M</span>
-                        <input type="number" class="form-control">
-                    </div>
-                </div>
-                <div class="col-12 col-md-2">
+                <h3 class="mt-5 text-light" id="displayJurComp">Juros Composto</h3>
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">C</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputReal" placeholder="Digite o Capital R$">
                     </div>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">I</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputTaxa" placeholder="Digite a taxa de juros">
                     </div>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-3">
                     <div class="input-group">
                         <span class="input-group-text">N</span>
-                        <input type="number" class="form-control">
+                        <input type="text" class="form-control inputTempo" placeholder="Digite o Tempo (meses)">
                     </div>
                 </div>
             </div>
             <div class="d-flex flex-wrap gap-2 justify-content-center mt-5">
-                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Resultado</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button" id="btnResult">Resultado</button>
                 <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
             </div>
         </section>
         <section class="container text-center mt-5 py-5 border-2 border-top">
-            <h2 class="mt-3 text-light">verificar Numero Primo</h2>
-            <p class="mt-4 text-light">Calculo para descobrir se o numero é primo</p>
+            <h2 class="mt-3 text-light">verifica se o Número é Primo</h2>
+            <p class="mt-4 text-light">Verificador para descobrir se o numero é primo</p>
             <div class="row justify-content-center g-4">
                 <div class="col-12 col-md-3 w-50 p-4">
-                    <h3 class="display-3 text-bg-light rounded">Resultado</h3>
+                    <h3 class="display-5 text-bg-light rounded" id="displayPri">Número Primo</h3>
                 </div>
             </div>
             <div class="row justify-content-center g-4">
                 <div class="col-12 col-md-3">
-                    <input type="number" class="form-control">
+                    <input type="text" class="form-control" id="inputPri" placeholder="Digite um número inteiro">
                 </div>
             </div>
             <div class="d-flex flex-wrap mt-4 gap-3 justify-content-center">
-                <button class="btn btn-outline-light btn-lg text-uppercase" type="button">Analisar</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase" type="button" id="btnAnalis">Analisar</button>
                 <button class="btn btn-outline-light btn-lg text-uppercase limpar" type="button">Limpar</button>
             </div>
         </section>
@@ -155,7 +148,7 @@
                 </div>
             </div>
             <div class="d-flex flex-wrap gap-2 mt-5 mb-3 justify-content-center">
-                <button class="btn btn-outline-light btn-lg text-uppercase">Gerar</button>
+                <button class="btn btn-outline-light btn-lg text-uppercase" id="btnGerar">Gerar</button>
                 <button class="btn btn-outline-light btn-lg text-uppercase limpar">Limpar</button>
             </div>
         </section>
