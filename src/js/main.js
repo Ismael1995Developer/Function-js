@@ -209,8 +209,9 @@ document.querySelector("#btnResult").addEventListener("click", () => {
   }
 });
 
+// ====== seção de validação de numero primo ===== //
 
-// validação input para numero inteiro
+// validação input para numero inteiro com Cleave
 const inputPri = new Cleave ('#inputPri', {
   numeral: true,                  // confirma que é numero
   numeralDecimalMark: ',',        // altera o , para .
@@ -258,8 +259,160 @@ if (inputPri.getRawValue() === "") {
 //   return true;
 // }
 
+// ===== Seção conversão numero decimal, binario e hex ======= //
+
+// validação de input 
+const instDec = new Cleave(".inputDec", {
+  numeral: true, 
+  numeralDecimalScale: 0,
+  numeralIntegerScale: 16,
+  numeralPositiveOnly: true,
+  delimiter: '',
+});
 
 
+const instBi = new Cleave('.inputBi', {
+  delimiter:' ',
+  blocks: [4,4,4,4,4,4,4,4],
+  onValueChanged: (e) => {
+    e.target.value = e.target.value.replace(/[^01\s]/g, '');
+  }
+});
+
+const instHe = new Cleave('.inputHe', {
+  uppercase: true,
+  delimiter: ''
+});
+
+// Função validação 
+
+function validarBase(raw, base, {allowEmpty = true, maxDigits} = {}) {
+  const s = String(raw ?? '').trim();
+  if (s === '') return allowEmpty ? {empty: true} : {error: 'valor obrigatório'};
+
+  // checar base 
+
+  const RX = {
+    10: /^\d+$/,
+    2: /^[01]+$/,
+    16: /^[0-9a-fA-F]+$/,
+  };
+  if (!RX[base].test(s)) {
+    return {error: `Não aceita caracteres somente numeros inteiros!`}
+  }
+
+  // Checar tamanho 
+  if(maxDigits && s.length > maxDigits) {
+    return { error: `Máximo de ${maxDigits} dígitos na base: ${base}`}
+  }
+
+  // converter para BigInt
+  let value;
+  try {
+    if(base === 10) value = BigInt(s);
+    else if (base === 2) value = BigInt('0b' + s);
+    else if (base === 16) value = BigInt('0x' + s);
+  } catch (error) {
+    return {error: `Número fora do intervalo suportado. `};
+  }
+  return {value}; // encerra a função 
+}
+
+// função para retornar string 
+
+function toBaseString(nBig, base, { uppercase = true} = {}) {
+  let s = nBig.toString(base);
+  if ( base === 16 && uppercase) s = s.toUpperCase();
+  return s;
+} 
+
+// Agrupa a partir da direita: "101101" -> "101 101" (size = 4)
+function groupRight(str, size, delim = ' ') {
+  let out = '', count = 0;
+  for (let i = str.length - 1; i >= 0; i--) {
+    out = str[i] + out;
+    count++;
+    if (i > 0 && count === size) {
+      out = delim + out;
+      count = 0;
+    }
+  }
+  return out;
+}
+
+// pad à esquerda até múltiplo (ex.: múltiplo de 4 para binário)
+function padLeftToMultiple(str, multiple, padChar = '0') {
+  const m = str.length % multiple;
+  if (m === 0) return str;
+  return padChar.repeat(multiple - m) + str;
+}
+
+// função conversão decimal para binario
+function toBinaryPretty(nBig, { groupSize = 4, padToMultiple = false } = {}) {
+  let s = nBig.toString(2);
+  if (padToMultiple && groupSize > 1) {
+    s = padLeftToMultiple(s, groupSize, '0');
+  }
+  return groupSize > 1 ? groupRight(s, groupSize, ' ') : s;
+}
+
+// função conversão hex 
+function toHexPretty(nBig, { uppercase = true } = {}) {
+  return uppercase ? nBig.toString(16).toUpperCase() : nBig.toString(16);
+}
+
+// função de UI para mensagem da validação e verificação 
+
+document.querySelector('#btnConverter').addEventListener('click', () => {
+
+  const rawDec = instDec.getRawValue().trim();
+  const rest = validarBase(rawDec, 10, { maxDigits: 16}); // retorna {empty | error | value}
+
+  if(rest.empty) {
+    alert('campo decimal vazio.');
+    instBi.setRawValue('');
+    instHe.setRawValue('');
+    return;
+  }
+  
+  if(rest.error) {
+    alert(rest.error);
+    return;
+  }
+
+  const nunDec = rest.value; //BigInt seguro
+
+  // converter 
+  const bin = toBinaryPretty(nunDec, {groupSize: 4, padToMultiple: true});
+  const hex = toHexPretty(nunDec, { uppercase: true});
+
+  // preencher os inputs
+  instBi.setRawValue(bin);
+  instHe.setRawValue(hex);
+  
+});
+
+
+
+
+
+
+
+
+// Para estudo: converte BigInt para base (2..36) via divisões sucessivas
+
+// function toBaseByDivMod(nBig, base) {
+//   if (nBig === 0n) return '0';
+//   const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//   const b = BigInt(base);
+//   let x = nBig, out = '';
+//   while (x > 0n) {
+//     const r = x % b;                 // resto
+//     out = alphabet[Number(r)] + out; // empilha à esquerda
+//     x = x / b;                       // quociente
+//   }
+//   return out;
+// }
 
 
 
