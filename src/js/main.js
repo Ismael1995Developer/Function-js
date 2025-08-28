@@ -273,10 +273,7 @@ const instDec = new Cleave(".inputDec", {
 
 const instBi = new Cleave('.inputBi', {
   delimiter:' ',
-  blocks: [4,4,4,4,4,4,4,4],
-  onValueChanged: (e) => {
-    e.target.value = e.target.value.replace(/[^01\s]/g, '');
-  }
+  blocks: [4,4,4,4,4,4,4,4]
 });
 
 const instHe = new Cleave('.inputHe', {
@@ -347,8 +344,8 @@ function padLeftToMultiple(str, multiple, padChar = '0') {
   return padChar.repeat(multiple - m) + str;
 }
 
-// função conversão decimal para binario
-function toBinaryPretty(nBig, { groupSize = 4, padToMultiple = false } = {}) {
+// Função conversão decimal para binario
+function DecToBi(nBig, { groupSize = 4, padToMultiple = false } = {}) {
   let s = nBig.toString(2);
   if (padToMultiple && groupSize > 1) {
     s = padLeftToMultiple(s, groupSize, '0');
@@ -356,48 +353,88 @@ function toBinaryPretty(nBig, { groupSize = 4, padToMultiple = false } = {}) {
   return groupSize > 1 ? groupRight(s, groupSize, ' ') : s;
 }
 
-// função conversão hex 
-function toHexPretty(nBig, { uppercase = true } = {}) {
+// Função conversão decimal para Hex 
+function DectoHex(nBig, { uppercase = true } = {}) {
   return uppercase ? nBig.toString(16).toUpperCase() : nBig.toString(16);
+}
+// Função binario para Decimal  
+function binToDec(rawBin) {
+  const s = String(rawBin ?? '').replace(/\s+/g, '').trim(); // remove espaços de agrupamento
+  const res = validarBase(s, 2, { allowEmpty: false });
+  if (res.error) return { error: res.error };
+  const decStr = toBaseString(res.value, 10);
+  return { value: decStr };
+}
+
+// Função binario para Hex
+function binToHex(rawBin) {
+  const s = String(rawBin ?? '').replace(/\s+/g, '').trim();
+  const res = validarBase(s, 2, { allowEmpty: false });
+  if (res.error) return { error: res.error };
+  const hexStr = DectoHex(res.value, { uppercase: true });
+  return { value: hexStr };
+}
+
+// Função Hex para binario 
+function hexToDec(rawHex) {
+  const s = String(rawHex ?? '').trim();
+  const res = validarBase(s, 16, { allowEmpty: false });
+  if (res.error) return { error: res.error };
+  const decStr = toBaseString(res.value, 10);
+  return { value: decStr };
+}
+
+// Função Hex para decimal 
+function hexToBin(rawHex) {
+  const s = String(rawHex ?? '').trim();
+  const res = validarBase(s, 16, { allowEmpty: false });
+  if (res.error) return { error: res.error };
+  const binStr = DecToBi(res.value, { groupSize: 4, padToMultiple: true });
+  return { value: binStr };
 }
 
 // função de UI para mensagem da validação e verificação 
 
 document.querySelector('#btnConverter').addEventListener('click', () => {
-
   const rawDec = instDec.getRawValue().trim();
-  const rest = validarBase(rawDec, 10, { maxDigits: 16}); // retorna {empty | error | value}
+  const rawBin = instBi.getRawValue().replace(/\s+/g, '').trim(); // tira espaços
+  const rawHex = instHe.getRawValue().trim();
 
-  if(rest.empty) {
-    alert('campo decimal vazio.');
-    instBi.setRawValue('');
-    instHe.setRawValue('');
+  const filled = [rawDec, rawBin, rawHex].filter(v => v !== '').length;
+  if (filled === 0) { alert('Preencha um campo.'); return; }
+  if (filled > 1)   { alert('Preencha apenas um campo por vez.'); return; }
+
+  // ORIGEM: DECIMAL
+  if (rawDec) {
+    const res = validarBase(rawDec, 10, { allowEmpty: false, maxDigits: 16 });
+    if (res.error) { alert(res.error); return; }
+    const bin = DecToBi(res.value, { groupSize: 4, padToMultiple: true });
+    const hex = DectoHex(res.value, { uppercase: true });
+    instBi.setRawValue(bin);
+    instHe.setRawValue(hex);
     return;
   }
-  
-  if(rest.error) {
-    alert(rest.error);
+
+  // ORIGEM: BINÁRIO
+  if (rawBin) {
+    const d = binToDec(rawBin);
+    const h = binToHex(rawBin);
+    if (d.error || h.error) { alert(d.error || h.error); return; }
+    instDec.setRawValue(d.value);
+    instHe.setRawValue(h.value);
     return;
   }
 
-  const nunDec = rest.value; //BigInt seguro
-
-  // converter 
-  const bin = toBinaryPretty(nunDec, {groupSize: 4, padToMultiple: true});
-  const hex = toHexPretty(nunDec, { uppercase: true});
-
-  // preencher os inputs
-  instBi.setRawValue(bin);
-  instHe.setRawValue(hex);
-  
+  // ORIGEM: HEX
+  if (rawHex) {
+    const d = hexToDec(rawHex);
+    const b = hexToBin(rawHex);
+    if (d.error || b.error) { alert(d.error || b.error); return; }
+    instDec.setRawValue(d.value);
+    instBi.setRawValue(b.value);
+    return;
+  }
 });
-
-
-
-
-
-
-
 
 // Para estudo: converte BigInt para base (2..36) via divisões sucessivas
 
@@ -414,5 +451,78 @@ document.querySelector('#btnConverter').addEventListener('click', () => {
 //   return out;
 // }
 
+// apenas rótulos/IDs rápidos.
+function gerarBase36(len = 12) {
+  let s = '';
+  while (s.length < len) s += Math.random().toString(36).slice(2);
+  return s.slice(0, len).toUpperCase(); // 0-9A-Z
+}
+
+// Evento Click
+document.querySelector('#btnGerar').addEventListener('click', () => {
+  const senhaInput = document.querySelector('#senha');
+  if (!senhaInput) return;
+  senhaInput.value = gerarBase36(12);
+});
 
 
+// Conjuntos
+const UPPER  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LOWER  = 'abcdefghijklmnopqrstuvwxyz';
+const DIGIT  = '0123456789';
+const SYMBOL = '!@#$%^&*_-+=?~:.';
+
+// Inteiro aleatório seguro em [0, max)
+function randIntSecure(max) {
+  if (max <= 0) throw new Error('max inválido');
+  const buf = new Uint8Array(1);
+  const lim = 256 - (256 % max); // rejeita valores que causariam viés
+  let v;
+  do {
+    crypto.getRandomValues(buf);
+    v = buf[0];
+  } while (v >= lim);
+  return v % max;
+}
+
+// Embaralha array in-place (Fisher–Yates) com aleatório seguro
+function shuffleSecure(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = randIntSecure(i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// // Gera senha forte
+// function gerarSenhaForte(len = 12, { upper = true, lower = true, digit = true, symbol = false } = {}) {
+//   const sets = [];
+//   if (upper) sets.push(UPPER);
+//   if (lower) sets.push(LOWER);
+//   if (digit) sets.push(DIGIT);
+//   if (symbol) sets.push(SYMBOL);
+
+//   const all = sets.join('');
+//   if (!all) throw new Error('Selecione ao menos um conjunto de caracteres.');
+//   if (len < sets.length) throw new Error(`Tamanho mínimo: ${sets.length}.`);
+
+//   const out = [];
+
+//   // Garante 1 de cada conjunto
+//   for (const set of sets) out.push(set[randIntSecure(set.length)]);
+
+//   // Completa o restante com o alfabeto combinado
+//   for (let i = out.length; i < len; i++) out.push(all[randIntSecure(all.length)]);
+
+//   // Embaralha para não ficarem previsíveis as primeiras posições
+//   return shuffleSecure(out).join('');
+// }
+
+// // Uso: liga no seu botão
+// document.querySelector('#btnGerar').addEventListener('click', () => {
+//   const senhaInput = document.querySelector('#senha');
+//   if (!senhaInput) return;
+
+//   // Ex.: 12 chars, com maiúsculas, minúsculas e dígitos; símbolos desativados
+//   senhaInput.value = gerarSenhaForte(12, { upper: true, lower: true, digit: true, symbol: false });
+// });
